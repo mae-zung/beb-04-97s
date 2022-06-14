@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
+import erc721Abi from "./erc721Abi";
 import { Route, Routes } from "react-router-dom";
 import Create from "./pages/Create";
 import Explore from "./pages/Explore";
