@@ -1,34 +1,53 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Web3 from "web3";
 import { Route, Routes } from "react-router-dom";
 import Create from "./pages/Create";
 import Explore from "./pages/Explore";
 import MyPage from "./pages/MyPage";
 import Home from "./pages/Home";
 import Navigator from "./pages/Navigator";
-import { dummyNFTs } from "./dummyNFTs";
 
 function App() {
-  const [nfts, setNfts] = useState([dummyNFTs]);
-  const onChange = (e) => {
-    setNfts(...nfts, {
-      id: nfts.length + 1,
-      name: e.target.nftname,
-      description: e.target.description,
-      owner: "owner1",
-      image: e.target.image,
-      price: 0.6,
+  const [web3, setWeb3] = useState();
+  const [account, setAccount] = useState("");
+  useEffect(() => {
+    if (typeof window.ethereum !== "undefined") {
+      // window.ethereum이 있다면
+      try {
+        const web = new Web3(window.ethereum); // 새로운 web3 객체를 만든다
+        setWeb3(web);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, []);
+  const connectWallet = async () => {
+    let accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
     });
+
+    setAccount(accounts[0]);
   };
+
   return (
     <div>
       <Navigator />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/create" element={<Create onChange={onChange} />} />
+        <Route path="/create" element={<Create />} />
         <Route path="/mypage" element={<MyPage />} />
       </Routes>
+      <button
+        className="metaConnect"
+        onClick={() => {
+          connectWallet();
+        }}
+      >
+        connect to MetaMask
+      </button>
+      <div className="userInfo">주소: {account}</div>
     </div>
   );
 }
