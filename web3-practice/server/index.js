@@ -78,10 +78,9 @@ app.post('/create', (req, res) => {
         //DB에 이미 한번 저장이 되어있는 상태면 추가해주는 쿼리를 날린다.
         db.collection('beb').update({ account: account }, {
           "$push": { "tokenIds": { "tokenId": tokenId, 'type': input.type } },
-
         });
         //metadata저장하는 쿼리
-        db.collection('Types').insertOne({ type: input.type, data: { account: account, tokenId: tokenId, metadata: input } })
+        db.collection('beb').insertOne({ type: input.type, data: { account: account, tokenId: tokenId, metadata: input } })
         //res.send('tokenId && metadata input success')
       } else {
         //처음이라면 저장해주자.

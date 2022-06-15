@@ -15,9 +15,11 @@ function App() {
   // const [newErc721addr, setNewErc721Addr] = useState(
   //   "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a"
   // );
-  const newErc721addr = "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a";
+  const newErc721addr = "0x413e220740407287F365fA5D23ece2E854f21fB5";
   const [erc721list, setErc721list] = useState([]); // 자신의 NFT 정보를 저장할 토큰
   const [allErc721list, setAllErc721list] = useState([]);
+
+
   useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
       // window.ethereum이 있다면
@@ -52,6 +54,7 @@ function App() {
       arr.push(i);
     }
 
+    console.log(1)
     for (let tokenId of arr) {
       let tokenOwner = await tokenContract.methods.ownerOf(tokenId).call();
       if (String(tokenOwner).toLowerCase() === account) {
@@ -62,17 +65,19 @@ function App() {
       }
     }
 
+
     for (let tokenId of arr) {
       let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
       setAllErc721list((prevState) => {
         return [...prevState, { name, symbol, tokenId, tokenURI }];
       });
     }
+
   };
 
   return (
     <div>
-      <Navigator connectWallet={connectWallet} account={account} />
+      <Navigator connectWallet={connectWallet} account={account} showMyNfts={showMyNfts} />
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
@@ -84,7 +89,7 @@ function App() {
               account={account}
               web3={web3}
               erc721list={erc721list}
-              showMyNfts={showMyNfts}
+              allErc721list={allErc721list}
             />
           }
         />
