@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Responsive from "../Responsive";
+import Button from "../Button";
 
 const Wrapper = styled(Responsive)`
   font-family: "Poppins";
@@ -12,7 +13,7 @@ const Wrapper = styled(Responsive)`
     width: 543px;
     height: 96px;
     left: 418px;
-    top: 136px;
+    top: 120px;
 
     font-weight: 600;
     font-size: 64px;
@@ -34,7 +35,7 @@ const Wrapper = styled(Responsive)`
     width: 77px;
     height: 36px;
     left: 421px;
-    top: 400px;
+    top: 370px;
 
     font-weight: 600;
     font-size: 24px;
@@ -45,7 +46,7 @@ const Wrapper = styled(Responsive)`
     width: 77px;
     height: 36px;
     left: 421px;
-    top: 600px;
+    top: 470px;
 
     font-weight: 600;
     font-size: 24px;
@@ -56,28 +57,69 @@ const Wrapper = styled(Responsive)`
     width: 600px;
     height: 36px;
     left: 421px;
-    top: 650px;
+    top: 515px;
 
     font-weight: 400;
     font-size: 18px;
     line-height: 20px;
   }
-  .
+  .inputName {
+    font-size: 1.4rem;
+    font-family: "poppins";
+    position: absolute;
+    width: 400px;
+    height: 36px;
+    left: 421px;
+    top: 430px;
+  }
+  .inputDesc {
+    font-size: 1.4rem;
+    font-family: "poppins";
+    position: absolute;
+    width: 800px;
+    height: 100px;
+    left: 421px;
+    top: 570px;
+  }
+  .inputImg {
+    position: absolute;
+    width: 800px;
+    height: 100px;
+    left: 421px;
+    top: 320px;
+  }
+  .createButton {
+    position: absolute;
+    width: 170px;
+    height: 50px;
+    left: 740px;
+    top: 750px;
+    color: white;
+    background: #2081e2;
+  }
 `;
 
-const Create = ({ onchange }) => {
+const Create = () => {
   return (
     <Wrapper>
       <h1 className="title">Create New Item</h1>
-      <p className="Image">Image</p>
-      <p className="name">Name</p>
-      <input type="text" name="nftname" />
-      <p className="description">Description</p>
+      <p className="Image">IMAGE</p>
+      <input
+        type="file"
+        id="img"
+        name="img"
+        accept="image/*"
+        className="inputImg"
+      />
+      <p className="name">NAME</p>
+      <input type="text" name="nftname" className="inputName" />
+      <p className="description">DESCRIPTION</p>
       <p className="description_contents">
         The description will be included on the item's detail page underneath
         its image.
       </p>
-      <input type="text" name="nftname" />
+      <input type="textarea" name="nftname" className="inputDesc" />
+      <Button className="createButton">Create</Button>
     </Wrapper>
   );
 };

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Responsive from "../Responsive";
 import styled from "styled-components";
 import OpenSeaLogo from "../OpenSea-Logo.png";
+import { MdAccountBalanceWallet } from "react-icons/md";
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -67,7 +68,7 @@ const Spacer = styled.div`
   height: 7rem;
 `;
 
-const Navigator = () => {
+const Navigator = ({ connectWallet, account, showMyNfts }) => {
   return (
     <>
       <HeaderBlock>
@@ -81,9 +82,22 @@ const Navigator = () => {
           <Link to="/create" className="create menu-common">
             Create
           </Link>
-          <Link to="/mypage" className="mypage menu-common">
-            My Page
-          </Link>
+          {account ? (
+            <Link
+              to="/mypage"
+              className="mypage menu-common"
+              onClick={showMyNfts}
+            >
+              My Page
+            </Link>
+          ) : (
+            <MdAccountBalanceWallet
+              className="mypage menu-common"
+              onClick={connectWallet}
+            />
+          )}
+
+          {/* <button onClick={connectWallet}>connect to MetaMask</button> */}
         </Wrapper>
       </HeaderBlock>
       <Spacer />
