@@ -37,13 +37,12 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
-const MyPage = ({ web3, account, erc721list, showMyNfts }) => {
+const MyPage = ({ web3, account, erc721list }) => {
   return (
     <>
       <Wrapper>
         <p className="address">ADDRESS {account}</p>
         <p className="created">CREATED</p>
-        <button onClick={showMyNfts}>SHOW MY NFTs</button>
         <TokenList web3={web3} account={account} erc721list={erc721list} />
       </Wrapper>
     </>

@@ -1,6 +1,7 @@
 {
   "name": "metadata-api-nodejs",
   "version": "1.0.0",
+  "type": "module",
   "description": "Sample metadata API for crypto collectibles",
   "main": "index.js",
   "scripts": {
