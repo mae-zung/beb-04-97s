@@ -4,7 +4,6 @@ import { useState } from "react";
 function Erc721({ web3, account, erc721list }) {
   const [to, setTo] = useState("");
   const sendToken = async (tokenAddr, tokenId) => {
-    console.log(tokenAddr + "," + tokenId);
     const tokenContract = await new web3.eth.Contract(erc721Abi, tokenAddr, {
       from: account,
     });
