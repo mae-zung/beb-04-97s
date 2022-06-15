@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Responsive from "../components/Responsive";
+import Responsive from "../Responsive";
 import styled from "styled-components";
-import OpenSeaLogo from "../image/OpenSea-Logo.png";
+import OpenSeaLogo from "../OpenSea-Logo.png";
 
 const HeaderBlock = styled.div`
   position: fixed;
