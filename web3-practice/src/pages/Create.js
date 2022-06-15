@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Responsive from "../Responsive";
+import Responsive from "../components/Responsive";
 
 const Wrapper = styled(Responsive)`
   font-family: "Poppins";

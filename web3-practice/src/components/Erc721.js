@@ -1,4 +1,4 @@
-import erc721Abi from "../erc721Abi";
+import erc721Abi from "./erc721Abi";
 import { useState } from "react";
 
 function Erc721({ web3, account, erc721list }) {
