@@ -89,7 +89,6 @@ function App() {
               account={account}
               web3={web3}
               erc721list={erc721list}
-              allErc721list={allErc721list}
             />
           }
         />

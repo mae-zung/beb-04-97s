@@ -43,7 +43,6 @@ const MyPage = ({ web3, account, erc721list }) => {
       <Wrapper>
         <p className="address">ADDRESS {account}</p>
         <p className="created">CREATED</p>
-        <div></div>
         <TokenList web3={web3} account={account} erc721list={erc721list} />
       </Wrapper>
     </>
