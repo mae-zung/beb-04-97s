@@ -12,12 +12,13 @@ import Navigator from "./pages/Navigator";
 function App() {
   const [web3, setWeb3] = useState();
   const [account, setAccount] = useState("");
+
   // const [newErc721addr, setNewErc721Addr] = useState(
   //   "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a"
   // );
   const newErc721addr = "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a";
   const [erc721list, setErc721list] = useState([]); // 자신의 NFT 정보를 저장할 토큰
-  const [allErc721list, setAllErc721list] = useState([]);
+
   useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
       // window.ethereum이 있다면
@@ -61,13 +62,7 @@ function App() {
         });
       }
     }
-
-    for (let tokenId of arr) {
-      let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
-      setAllErc721list((prevState) => {
-        return [...prevState, { name, symbol, tokenId, tokenURI }];
-      });
-    }
+    console.log("erc721list :" + erc721list.length);
   };
 
   return (

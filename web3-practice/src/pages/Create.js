@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Responsive from "../components/Responsive";
 import Button from "../components/Button";
+import { create } from "ipfs-http-client";
 
 const Wrapper = styled(Responsive)`
   font-family: "Poppins";
@@ -98,8 +99,25 @@ const Wrapper = styled(Responsive)`
     background: #2081e2;
   }
 `;
+const client = create("https://ipfs.infura.io:5001/api/v0");
 
 const Create = () => {
+  const [imgURl, updateimgUrl] = useState("");
+  const [nftName, setNftName] = useState("");
+  const [nftDescription, setNftDescription] = useState("");
+  const [metadataUrl, setmetadataUrl] = useState("");
+
+  async function onChange(e) {
+    const img = e.target.files[0];
+    try {
+      const added = await client.add(img); //파일 업로드
+      const url = `ipfs.infura.io/ipfs/${added.path}`;
+      updateimgUrl(url);
+      console.log(imgURl);
+    } catch (error) {
+      console.log("Error uploading img: ", error);
+    }
+  }
   return (
     <Wrapper>
       <h1 className="title">Create New Item</h1>
@@ -119,7 +137,9 @@ const Create = () => {
         its image.
       </p>
       <input type="textarea" name="nftname" className="inputDesc" />
-      <Button className="createButton">Create</Button>
+      <Button className="createButton" onChange={onChange}>
+        Create
+      </Button>
     </Wrapper>
   );
 };
