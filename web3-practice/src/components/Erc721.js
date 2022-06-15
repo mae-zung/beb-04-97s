@@ -20,28 +20,7 @@ function Erc721({ web3, account, erc721list }) {
     <div className="erc721list">
       {erc721list.map((token) => {
         return (
-          <div className="erc721token">
-            Name: <span className="name">{token.name}</span>(
-            <span className="symbol">{token.symbol}</span>)
-            <div className="nft">id: {token.tokenId}</div>
-            <img src={token.tokenURI} width={300} />
-            <div className="tokenTransfer">
-              To:{" "}
-              <input
-                type="text"
-                value={to}
-                onChange={(e) => {
-                  setTo(e.target.value);
-                }}
-              ></input>
-              <button
-                className="sendErc20Btn"
-                onClick={sendToken.bind(this, to, token.tokenId)}
-              >
-                send Token
-              </button>
-            </div>
-          </div>
+          <img className="erc721token" src={token.tokenURI} width={300} />
         );
       })}
     </div>
