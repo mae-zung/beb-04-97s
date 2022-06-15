@@ -1,5 +1,5 @@
 import React from "react";
-import Responsive from "../Responsive";
+import Responsive from "../components/Responsive";
 import styled from "styled-components";
 import TokenList from "../components/TokenList";
 

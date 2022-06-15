@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Responsive from "../Responsive";
+import Responsive from "../components/Responsive";
 import styled from "styled-components";
-import OpenSeaLogo from "../OpenSea-Logo.png";
+import OpenSeaLogo from "../image/OpenSea-Logo.png";
 import { MdAccountBalanceWallet } from "react-icons/md";
 
 const HeaderBlock = styled.div`

@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Responsive from "../Responsive";
+import Responsive from "../components/Responsive";
 import styled from "styled-components";
-import Button from "../Button";
+import Button from "../components/Button";
 
 const Wrapper = styled(Responsive)`
   font-style: normal;
