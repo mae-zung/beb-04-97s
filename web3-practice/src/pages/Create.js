@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Responsive from "../components/Responsive";
 import Button from "../components/Button";
 import { create } from "ipfs-http-client";
+import erc721Abi from "../components/erc721Abi";
+import Web3 from "web3";
 
 const Wrapper = styled(Responsive)`
   font-family: "Poppins";
@@ -99,25 +101,74 @@ const Wrapper = styled(Responsive)`
     background: #2081e2;
   }
 `;
+
+const MintFunc = async (address, imgurl, contractAdress) => {
+  if (window.ethereum) {
+    const web3 = new Web3(window.ethereum);
+    try {
+      const myContract = new web3.eth.Contract(erc721Abi, contractAdress);
+      const gasPrice = await web3.eth.getGasPrice();
+      const itemID = await myContract.methods
+        .mintNFT(address, JSON.stringify(imgurl))
+        .send({
+          from: address,
+          gas: 2000000,
+          gasPrice,
+        });
+      console.log("민팅 완료");
+      return itemID;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 const client = create("https://ipfs.infura.io:5001/api/v0");
 
-const Create = () => {
-  const [imgURl, updateimgUrl] = useState("");
-  const [nftName, setNftName] = useState("");
-  const [nftDescription, setNftDescription] = useState("");
-  const [metadataUrl, setmetadataUrl] = useState("");
+const Create = ({ account, contractAddress }) => {
+  const [metadata, setMetadata] = useState({
+    address: "",
+    name: "",
+    ercURL: "",
+    createdAT: "",
+    description: "",
+    sellType: false,
+    sellPrice: "",
+  });
 
-  async function onChange(e) {
+  async function handleUrl(e) {
     const img = e.target.files[0];
     try {
       const added = await client.add(img); //파일 업로드
       const url = `ipfs.infura.io/ipfs/${added.path}`;
-      updateimgUrl(url);
-      console.log(imgURl);
+
+      setMetadata({ ...metadata, ercURL: url });
     } catch (error) {
-      console.log("Error uploading img: ", error);
+      console.log("img 업로드 에러: ", error);
     }
+    console.log(metadata);
   }
+
+  const handleChange = (e) => {
+    setMetadata({ ...metadata, [e.target.name]: e.target.value });
+    console.log(metadata);
+  };
+
+  const handleSell = () => {
+    setMetadata({ ...metadata, sellType: !metadata.sellType });
+    console.log(metadata);
+  };
+
+  const handleClick = () => {
+    //metadata 완성하기 => address, createdAT
+    if (account) {
+      setMetadata({ ...metadata, address: account, createdAT: Date() });
+      console.log(metadata);
+    }
+    // 컨트랙 함수 실행
+    MintFunc(account, metadata.ercURL, contractAddress);
+    // Post 요청: DB 저장
+  };
+
   return (
     <Wrapper>
       <h1 className="title">Create New Item</h1>
@@ -128,16 +179,33 @@ const Create = () => {
         name="img"
         accept="image/*"
         className="inputImg"
+        onChange={handleUrl}
       />
       <p className="name">NAME</p>
-      <input type="text" name="nftname" className="inputName" />
+      <input
+        type="text"
+        name="name"
+        className="inputName"
+        onChange={handleChange}
+      />
       <p className="description">DESCRIPTION</p>
       <p className="description_contents">
         The description will be included on the item's detail page underneath
         its image.
       </p>
-      <input type="textarea" name="nftname" className="inputDesc" />
-      <Button className="createButton" onChange={onChange}>
+      <input
+        type="textarea"
+        name="description"
+        className="inputDesc"
+        onChange={handleChange}
+      />
+      <Button name="sellType" onClick={handleSell}>
+        Sell?
+      </Button>
+      {metadata.sellType ? (
+        <input type="number" name="sellPrice" onChange={handleChange} />
+      ) : null}
+      <Button className="createButton" onClick={handleClick}>
         Create
       </Button>
     </Wrapper>

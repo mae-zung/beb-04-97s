@@ -16,7 +16,7 @@ function App() {
   // const [newErc721addr, setNewErc721Addr] = useState(
   //   "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a"
   // );
-  const newErc721addr = "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a";
+  const newErc721addr = "0x413e220740407287F365fA5D23ece2E854f21fB5";
   const [erc721list, setErc721list] = useState([]); // 자신의 NFT 정보를 저장할 토큰
 
   useEffect(() => {
@@ -71,7 +71,10 @@ function App() {
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/create" element={<Create />} />
+        <Route
+          path="/create"
+          element={<Create account={account} contractAddress={newErc721addr} />}
+        />
         <Route
           path="/mypage"
           element={
