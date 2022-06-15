@@ -1,5 +1,5 @@
 import React from "react";
-import { dummyNFTs } from "../dummyNFTs";
+import { dummyNFTs } from "../components/dummyNFTs";
 
 const Explore = () => {
   return (
