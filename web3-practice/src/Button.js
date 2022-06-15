@@ -16,6 +16,22 @@ const buttonStyle = css`
   &:hover {
     background: #8bbff2;
   }
+  ${(props) =>
+    props.fullWidth &&
+    css`
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      width: 100%;
+      font-size: 1.125rem;
+    `}
+  ${(props) =>
+    props.cyan &&
+    css`
+      background: #2081e2;
+      &:hover {
+        background: #8bbff2;
+      }
+    `}
 `;
 
 const StyledButton = styled.button`
