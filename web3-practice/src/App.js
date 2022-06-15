@@ -8,13 +8,16 @@ import Explore from "./pages/Explore";
 import MyPage from "./pages/MyPage";
 import Home from "./pages/Home";
 import Navigator from "./pages/Navigator";
-import TokenList from "./components/TokenList";
 
 function App() {
   const [web3, setWeb3] = useState();
   const [account, setAccount] = useState("");
-  const [newErc721addr, setNewErc721Addr] = useState();
+  // const [newErc721addr, setNewErc721Addr] = useState(
+  //   "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a"
+  // );
+  const newErc721addr = "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a";
   const [erc721list, setErc721list] = useState([]); // 자신의 NFT 정보를 저장할 토큰
+  const [allErc721list, setAllErc721list] = useState([]);
   useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
       // window.ethereum이 있다면
@@ -35,9 +38,12 @@ function App() {
     setAccount(accounts[0]);
   };
 
+  const showMyNfts = () => {
+    addNewErc721Token();
+  };
+
   const addNewErc721Token = async () => {
     const tokenContract = await new web3.eth.Contract(erc721Abi, newErc721addr);
-    console.log(tokenContract.methods);
     const name = await tokenContract.methods.name().call();
     const symbol = await tokenContract.methods.symbol().call();
     const totalSupply = await tokenContract.methods.totalSupply().call();
@@ -55,36 +61,34 @@ function App() {
         });
       }
     }
+
+    for (let tokenId of arr) {
+      let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
+      setAllErc721list((prevState) => {
+        return [...prevState, { name, symbol, tokenId, tokenURI }];
+      });
+    }
   };
 
   return (
     <div>
-      <Navigator />
+      <Navigator connectWallet={connectWallet} account={account} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route exact={true} path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/create" element={<Create />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route
+          path="/mypage"
+          element={
+            <MyPage
+              account={account}
+              web3={web3}
+              erc721list={erc721list}
+              showMyNfts={showMyNfts}
+            />
+          }
+        />
       </Routes>
-      <button
-        className="metaConnect"
-        onClick={() => {
-          connectWallet();
-        }}
-      >
-        connect to MetaMask
-      </button>
-      <div className="userInfo">주소: {account}</div>
-      <div className="newErc721">
-        <input
-          type="text"
-          onChange={(e) => {
-            setNewErc721Addr(e.target.value); // 입력받을 때마다 newErc721addr 갱신
-          }}
-        ></input>
-        <button onClick={addNewErc721Token}>add new erc721</button>
-      </div>
-      <TokenList web3={web3} account={account} erc721list={erc721list} />
     </div>
   );
 }
