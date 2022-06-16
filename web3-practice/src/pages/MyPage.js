@@ -37,13 +37,22 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
+const NFTList = styled(Responsive)`
+  position: absolute;
+
+  left: 100px;
+  top: 550px;
+`;
+
 const MyPage = ({ web3, account, erc721list }) => {
   return (
     <>
       <Wrapper>
         <p className="address">ADDRESS {account}</p>
         <p className="created">CREATED</p>
+        <NFTList>
         <TokenList web3={web3} account={account} erc721list={erc721list} />
+        </NFTList>
       </Wrapper>
     </>
   );

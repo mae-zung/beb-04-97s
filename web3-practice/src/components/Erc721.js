@@ -1,5 +1,13 @@
 import erc721Abi from "./erc721Abi";
 import { useState } from "react";
+import styled from "styled-components";
+
+const NFTeach = styled.img`
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+`;
+
 
 function Erc721({ web3, account, erc721list }) {
   const [to, setTo] = useState("");
@@ -19,7 +27,7 @@ function Erc721({ web3, account, erc721list }) {
   return (
     <div className="erc721list">
       {erc721list.map((token) => {
-        return <img className="erc721token" src={token.tokenURI} width={300} />;
+        return <NFTeach className="erc721token" src={token.tokenURI} />;
       })}
     </div>
   );
