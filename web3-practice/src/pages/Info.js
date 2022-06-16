@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../components/Button";
 import styled from "styled-components";
 import Responsive from "../components/Responsive";
 import { MdAccountBalanceWallet } from "react-icons/md";
 import { FaEthereum } from "react-icons/fa";
+import axios from 'axios';
 
 const Wrapper = styled(Responsive)`
   font-style: normal;
@@ -23,7 +24,7 @@ const Wrapper = styled(Responsive)`
     left: 829px;
     top: 170px;
 
-    font-weight: bold;
+    font-weight: bold;.split('/')
     font-size: 50px;
     line-height: 60px;
 
@@ -86,17 +87,30 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
-const info = () => {
+const Info = () => {
+
+  const [nft, setNft] = useState([]);
+
+  let url = window.location.href.split('/')
+  console.log(url[4])
+
+  useEffect(() => {
+  axios.get('http://localhost:5000/info/'+url[4])
+  .then((res) => {
+    setNft(res.data)
+  })
+  }, []);
+
   return (
     <Wrapper>
       <img
-        src="https://lh3.googleusercontent.com/3cyQw6gbRERXDSbh9fqv-1zC9Cl2eIClHKEdlGoOx0QxEBAYA1pAiY0p_D8mzE8KdzvsxxVHs3KYozfZHIg_1g8C2pLZm1BUN1jK=w600"
+        src={nft.ercURL}
         className="nftimg"
       />
-      <h1 className="name">NFT name</h1>
-      <p className="description">NFT description</p>
-      <p className="currentPrice">Current Price</p>
-      <FaEthereum className="eth" /> <p className="price">0.07</p>
+      <h1 className="name">NFT name --- {nft.name}</h1>
+      <p className="description">NFT description --- {nft.description}</p>
+      <p className="currentPrice">NFT currentPrice --- {nft.sellPrice}</p>
+      <FaEthereum className="eth" /> <p className="price">{nft.sellPrice}</p>
       <Button className="button1">
         <MdAccountBalanceWallet />
         BUY NOW
@@ -105,4 +119,4 @@ const info = () => {
   );
 };
 
-export default info;
+export default Info;
