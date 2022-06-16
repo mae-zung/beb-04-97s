@@ -68,7 +68,7 @@ const Spacer = styled.div`
   height: 7rem;
 `;
 
-const Navigator = ({ connectWallet, account, showMyNfts }) => {
+const Navigator = ({ connectWallet, account, showMyNfts, showAllNfts }) => {
   return (
     <>
       <HeaderBlock>
@@ -76,7 +76,11 @@ const Navigator = ({ connectWallet, account, showMyNfts }) => {
           <Link to="/">
             <img src={OpenSeaLogo} alt="opensea_logo" className="logo" />
           </Link>
-          <Link to="/explore" className="explore menu-common">
+          <Link
+            to="/explore"
+            className="explore menu-common"
+            onClick={showAllNfts}
+          >
             Explore
           </Link>
           <Link to="/create" className="create menu-common">
