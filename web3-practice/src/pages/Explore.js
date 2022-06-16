@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { dummyNFTs } from "../components/dummyNFTs";
 import styled from "styled-components";
 import TokenList from "../components/TokenList";
@@ -11,7 +11,13 @@ const NFTList = styled(Responsive)`
   top: 550px;
 `;
 
-const Explore = ({ web3, account, erc721list }) => {
+const Explore = ({ web3, account, erc721list, showAllNfts }) => {
+
+  useEffect(() => {
+
+    showAllNfts()
+  }, []);
+  
   return (
     <div>
       <h1>Explore NFTs</h1>

@@ -92,15 +92,13 @@ function App() {
       <Navigator
         connectWallet={connectWallet}
         account={account}
-        showMyNfts={showMyNfts}
-        showAllNfts={showAllNfts}
       />
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
         <Route
           path="/explore"
           element={
-            <Explore account={account} web3={web3} erc721list={allErc721list} />
+            <Explore account={account} web3={web3} erc721list={allErc721list} showAllNfts={showAllNfts} />
           }
         />
         <Route
@@ -110,7 +108,7 @@ function App() {
         <Route
           path="/mypage"
           element={
-            <MyPage account={account} web3={web3} erc721list={erc721list} />
+            <MyPage account={account} web3={web3} erc721list={erc721list} showMyNfts={showMyNfts}/>
           }
         />
       </Routes>

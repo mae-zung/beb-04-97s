@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Responsive from "../components/Responsive";
 import styled from "styled-components";
 import TokenList from "../components/TokenList";
@@ -44,10 +44,16 @@ const NFTList = styled(Responsive)`
   top: 550px;
 `;
 
-const MyPage = ({ web3, account, erc721list }) => {
+const MyPage = ({ web3, account, erc721list, showMyNfts}) => {
+
+  useEffect(() => {
+
+    showMyNfts()
+  }, []);
+
   return (
     <>
-      <Wrapper>
+      <Wrapper>l
         <p className="address">ADDRESS {account}</p>
         <p className="created">CREATED</p>
         <NFTList>
