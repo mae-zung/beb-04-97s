@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Responsive from "../components/Responsive";
 import styled from "styled-components";
 import TokenList from "../components/TokenList";
-import axios from 'axios';
+import axios from "axios";
 
 const Wrapper = styled(Responsive)`
   font-style: normal;
@@ -45,25 +45,23 @@ const NFTList = styled(Responsive)`
   top: 550px;
 `;
 
-const MyPage = ({ web3, account, erc721list, showMyNfts}) => {
-
+const MyPage = ({ web3, account, erc721list, showMyNfts }) => {
   const [nft, setNft] = useState([]);
-  let newArr = []
+  let newArr = [];
 
   useEffect(() => {
-    showMyNfts()
-    axios.get('http://localhost:5000/mypage')
-    .then((res) => {
-      for (let i = 0; i < res.data.length; i++){
-        if(res.data[i].address === account){
+    showMyNfts();
+    axios.get("http://localhost:5000/mypage").then((res) => {
+      for (let i = 0; i < res.data.length; i++) {
+        if (res.data[i].address === account) {
           // console.log(res.data[i].address)
-          newArr.push(res.data[i])
+          newArr.push(res.data[i]);
         }
       }
       // console.log(res.data)
       // console.log(newArr)
-      setNft(newArr)
-    })
+      setNft(newArr);
+    });
   }, []);
 
   return (
@@ -72,7 +70,12 @@ const MyPage = ({ web3, account, erc721list, showMyNfts}) => {
         <p className="address">ADDRESS {account}</p>
         <p className="created">CREATED</p>
         <NFTList>
-          <TokenList web3={web3} account={account} erc721list={erc721list} nft={nft}/>
+          <TokenList
+            web3={web3}
+            account={account}
+            erc721list={erc721list}
+            nft={nft}
+          />
         </NFTList>
       </Wrapper>
     </>
