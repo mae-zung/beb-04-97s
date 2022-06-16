@@ -9,9 +9,11 @@ const buttonStyle = css`
   font-weight: bold;
   padding: 0.25rem 1rem;
   text-align: center;
+  line-height: 0rem;
   outline: none;
   cursor: pointer;
   text-decoration: none;
+  
 
   &:hover {
     background: #8bbff2;

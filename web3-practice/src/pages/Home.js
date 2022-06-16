@@ -65,10 +65,12 @@ const Home = () => {
       </h3>
 
       <Button to="/explore" className="button1">
+      <pre/>
         Explore
       </Button>
 
       <Button to="/create" className="button2">
+      <pre/>
         Create
       </Button>
     </Wrapper>
