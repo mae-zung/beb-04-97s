@@ -16,9 +16,8 @@ function App() {
   // const [newErc721addr, setNewErc721Addr] = useState(
   //   "0xaE4DCDfB8B778Bb83872FBc550d9E7e7264B600a"
   // );
-  const newErc721addr = "0x413e220740407287F365fA5D23ece2E854f21fB5";
+  const newErc721addr = "0x70d609C2250DC188930dcf94eC2052c27EE9e81f";
   const [erc721list, setErc721list] = useState([]); // 자신의 NFT 정보를 저장할 토큰
-
 
   useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
@@ -54,7 +53,7 @@ function App() {
       arr.push(i);
     }
 
-    console.log(1)
+    console.log(1);
     for (let tokenId of arr) {
       let tokenOwner = await tokenContract.methods.ownerOf(tokenId).call();
       if (String(tokenOwner).toLowerCase() === account) {
@@ -64,11 +63,15 @@ function App() {
         });
       }
     }
-
+  };
 
   return (
     <div>
-      <Navigator connectWallet={connectWallet} account={account} showMyNfts={showMyNfts} />
+      <Navigator
+        connectWallet={connectWallet}
+        account={account}
+        showMyNfts={showMyNfts}
+      />
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
@@ -79,11 +82,7 @@ function App() {
         <Route
           path="/mypage"
           element={
-            <MyPage
-              account={account}
-              web3={web3}
-              erc721list={erc721list}
-            />
+            <MyPage account={account} web3={web3} erc721list={erc721list} />
           }
         />
       </Routes>

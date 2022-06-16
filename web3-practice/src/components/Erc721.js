@@ -19,9 +19,7 @@ function Erc721({ web3, account, erc721list }) {
   return (
     <div className="erc721list">
       {erc721list.map((token) => {
-        return (
-          <img className="erc721token" src={token.tokenURI} width={300} />
-        );
+        return <img className="erc721token" src={token.tokenURI} width={300} />;
       })}
     </div>
   );
