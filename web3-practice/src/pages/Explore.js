@@ -11,12 +11,11 @@ const NFTList = styled(Responsive)`
   top: 550px;
 `;
 
-const Explore = ({ showMyNfts, web3, account, erc721list }) => {
+const Explore = ({ web3, account, erc721list }) => {
   return (
     <div>
       <h1>Explore NFTs</h1>
       <p>{dummyNFTs.length} items</p>
-      <button onClick={showMyNfts}>SHOW MY NFTs</button>
       <TokenList web3={web3} account={account} erc721list={erc721list} />
     </div>
   );
