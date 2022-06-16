@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { create } from "ipfs-http-client";
 import erc721Abi from "../components/erc721Abi";
 import Web3 from "web3";
+import axios from 'axios';
 
 const Wrapper = styled(Responsive)`
   font-family: "Poppins";
@@ -148,7 +149,7 @@ const Create = ({ account, contractAddress }) => {
 
   const handleChange = (e) => {
     setMetadata({ ...metadata, [e.target.name]: e.target.value });
-    console.log(metadata);
+    //console.log(metadata);
   };
 
   const handleSell = () => {
@@ -162,9 +163,32 @@ const Create = ({ account, contractAddress }) => {
       setMetadata({ ...metadata, address: account, createdAT: Date() });
       console.log(metadata);
     }
+
     // 컨트랙 함수 실행
     MintFunc(account, metadata.ercURL, contractAddress);
     // Post 요청: DB 저장
+    try {
+      axios 
+        .post('http://localhost:5000/create', {
+          address: metadata.address, // 소유자 주소 
+          name: metadata.name, // NFT 이름 
+          ercURL: metadata.ercURL, // NFT URL 
+          createdAT: metadata.createdAT, // NFT 생성일 
+          description: metadata.description, // NFT 설명
+          sellType: metadata.sellType, // 판매여부 
+          sellPrice: metadata.sellPrice // 가격 
+        })
+        .then((res) => {
+          //console.log(res);
+          alert("성공적으로 발행되었습니다.");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      } catch (error) {
+        return console.log(error);
+      }
+
   };
 
   return (

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import TokenList from "../components/TokenList";
 import Responsive from "../components/Responsive";
 
+
 const NFTList = styled(Responsive)`
   position: absolute;
 

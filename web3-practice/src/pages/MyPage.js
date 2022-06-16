@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Responsive from "../components/Responsive";
 import styled from "styled-components";
 import TokenList from "../components/TokenList";
+import axios from 'axios';
 
 const Wrapper = styled(Responsive)`
   font-style: normal;
@@ -47,13 +48,12 @@ const NFTList = styled(Responsive)`
 const MyPage = ({ web3, account, erc721list, showMyNfts}) => {
 
   useEffect(() => {
-
     showMyNfts()
   }, []);
 
   return (
     <>
-      <Wrapper>l
+      <Wrapper>
         <p className="address">ADDRESS {account}</p>
         <p className="created">CREATED</p>
         <NFTList>
