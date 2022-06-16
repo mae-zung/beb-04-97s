@@ -1,6 +1,7 @@
 import erc721Abi from "./erc721Abi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import Info from "../pages/Info";
 
 const NFTeach = styled.img`
     width: 300px;
@@ -9,7 +10,8 @@ const NFTeach = styled.img`
 `;
 
 
-function Erc721({ web3, account, erc721list }) {
+function Erc721({ web3, account, erc721list, nft}) {
+
   const [to, setTo] = useState("");
   const sendToken = async (tokenAddr, tokenId) => {
     const tokenContract = await new web3.eth.Contract(erc721Abi, tokenAddr, {
@@ -24,10 +26,13 @@ function Erc721({ web3, account, erc721list }) {
         setTo("");
       });
   };
+
   return (
     <div className="erc721list">
-      {erc721list.map((token) => {
-        return <NFTeach className="erc721token" src={token.tokenURI} />;
+      {nft.map((token) => {
+        return <NFTeach className="erc721token" src={token.ercURL} >
+          
+        </NFTeach>;
       })}
     </div>
   );
