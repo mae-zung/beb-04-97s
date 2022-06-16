@@ -108,13 +108,11 @@ const MintFunc = async (address, imgurl, contractAdress) => {
     try {
       const myContract = new web3.eth.Contract(erc721Abi, contractAdress);
       const gasPrice = await web3.eth.getGasPrice();
-      const itemID = await myContract.methods
-        .mintNFT(address, JSON.stringify(imgurl))
-        .send({
-          from: address,
-          gas: 2000000,
-          gasPrice,
-        });
+      const itemID = await myContract.methods.mintNFT(address, imgurl).send({
+        from: address,
+        gas: 2000000,
+        gasPrice,
+      });
       console.log("민팅 완료");
       return itemID;
     } catch (error) {
@@ -139,7 +137,7 @@ const Create = ({ account, contractAddress }) => {
     const img = e.target.files[0];
     try {
       const added = await client.add(img); //파일 업로드
-      const url = `ipfs.infura.io/ipfs/${added.path}`;
+      const url = ` https://ipfs.io/ipfs/${added.path}`;
 
       setMetadata({ ...metadata, ercURL: url });
     } catch (error) {
