@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { create } from "ipfs-http-client";
 import erc721Abi from "../components/erc721Abi";
 import Web3 from "web3";
+import axios from 'axios';
 
 const Wrapper = styled(Responsive)`
   font-family: "Poppins";
@@ -102,11 +103,11 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
-const MintFunc = async (address, imgurl, contractAdress) => {
+const MintFunc = async (address, imgurl, contractAddress) => {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
     try {
-      const myContract = new web3.eth.Contract(erc721Abi, contractAdress);
+      const myContract = new web3.eth.Contract(erc721Abi, contractAddress);
       const gasPrice = await web3.eth.getGasPrice();
       const itemID = await myContract.methods.mintNFT(address, imgurl).send({
         from: address,
@@ -148,7 +149,7 @@ const Create = ({ account, contractAddress }) => {
 
   const handleChange = (e) => {
     setMetadata({ ...metadata, [e.target.name]: e.target.value });
-    console.log(metadata);
+    //console.log(metadata);
   };
 
   const handleSell = () => {
@@ -162,9 +163,34 @@ const Create = ({ account, contractAddress }) => {
       setMetadata({ ...metadata, address: account, createdAT: Date() });
       console.log(metadata);
     }
+
     // 컨트랙 함수 실행
     MintFunc(account, metadata.ercURL, contractAddress);
+    console.log(account)
+    console.log(Date)
     // Post 요청: DB 저장
+    try {
+      axios 
+        .post('http://localhost:5000/create', {
+          address: account, // 소유자 주소 
+          name: metadata.name, // NFT 이름 
+          ercURL: metadata.ercURL, // NFT URL 
+          createdAT: Date(), // NFT 생성일 
+          description: metadata.description, // NFT 설명
+          sellType: metadata.sellType, // 판매여부 
+          sellPrice: metadata.sellPrice // 가격 
+        })
+        .then((res) => {
+          //console.log(res);
+          alert("성공적으로 발행되었습니다.");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      } catch (error) {
+        return console.log(error);
+      }
+
   };
 
   return (

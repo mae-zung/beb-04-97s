@@ -66,46 +66,62 @@ app.post('/create', (req, res) => {
     req.body.description,
     req.body.sellType,
     req.body.sellPrice,
-  )
+  ) 
+
+  db.collection('beb').insertOne({ address: input.address, name: input.name, ercURL: input.ercURL, createdAT: input.createdAT, description: input.description, sellType: input.sellType, sellPrice: input.sellPrice,}, (error, result) => {
+          console.log(result);
+        });
 
   //DB에 이미 한번 저장이 되어있는 지 확인하자  -- 저장되어있으면 update, 새로운사람이면 insertOne을 진행하자.
   //account:[[tokenId,type],[tokenId,type],[tokenId,type]....]
   //2. {type : {toeknId:metadata}}
-  if (account !== undefined) {
-    db.collection('beb').find({ 'account': account }).toArray((error, result) => {
+  // if (account !== undefined) {
+  //   db.collection('beb').find({ 'account': account }).toArray((error, result) => {
 
-      if (result[0] !== undefined) {
-        //DB에 이미 한번 저장이 되어있는 상태면 추가해주는 쿼리를 날린다.
-        db.collection('beb').update({ account: account }, {
-          "$push": { "tokenIds": { "tokenId": tokenId, 'type': input.type } },
-        });
-        //metadata저장하는 쿼리
-        db.collection('beb').insertOne({ type: input.type, data: { account: account, tokenId: tokenId, metadata: input } })
-        //res.send('tokenId && metadata input success')
-      } else {
-        //처음이라면 저장해주자.
-        db.collection('NFTPOST').insertOne({ account: account, tokenIds: [{ tokenId: tokenId, type: input.type }] }, (error, result) => {
-          console.log(result);
-        });
-        //metadata저장하는 쿼리
-        db.collection('Types').insertOne({ type: input.type, data: { account: account, tokenId: tokenId, metadata: input } })
-        //res.send('tokenId && metadata input success')
-      }
-    })
-  }
+  //     if (result[0] !== undefined) {
+  //       //DB에 이미 한번 저장이 되어있는 상태면 추가해주는 쿼리를 날린다.
+  //       db.collection('beb').update({ account: account }, {
+  //         "$push": { "tokenIds": { "tokenId": tokenId, 'type': input.type } },
+  //       });
+  //       //metadata저장하는 쿼리
+  //       db.collection('beb').insertOne({ sellType: input.sellType, data: { account: account, tokenId: tokenId, metadata: input } })
+  //       //res.send('tokenId && metadata input success')
+  //     } else {
+  //       //처음이라면 저장해주자.
+  //       db.collection('beb').insertOne({ account: account, tokenIds: [{ tokenId: tokenId, sellType: input.sellType }] }, (error, result) => {
+  //         console.log(result);
+  //       });
+  //       //metadata저장하는 쿼리
+  //       db.collection('beb').insertOne({ sellType: input.type, data: { account: account, tokenId: tokenId, metadata: input } })
+  //       //res.send('tokenId && metadata input success')
+  //     }
+  //   })
+  // }
   res.send('success');
 
 })
 
+app.get('/explore',(req,res)=>{
+  db.collection('beb').find({}).toArray((err,result)=>{
+    console.log(result[0].data);
+    res.send(result);
+  })
+})
 
+app.get('/mypage',(req,res)=>{
+  db.collection('beb').find({}).toArray((err,result)=>{
+    console.log(result[0].data);
+    res.send(result);
+  })
+})
 
 
 //메타데이터를 보내주는 작업이 끝!! 
-app.get('/erc721/:tokenId', (req, res) => {
+app.get('/:tokenId', (req, res) => {
   let tokenId = req.params.tokenId;
   console.log(tokenId);
 
-  db.collection('Types').find({ 'data.tokenId': tokenId }).toArray((error, result) => {
+  db.collection('beb').find({ 'data.tokenId': tokenId }).toArray((error, result) => {
     console.log(result);
     if (error) console.log(error);
     if (result) {
