@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import { create } from "ipfs-http-client";
 import erc721Abi from "../components/erc721Abi";
 import Web3 from "web3";
-import axios from 'axios';
+import axios from "axios";
 
 const Wrapper = styled(Responsive)`
   font-family: "Poppins";
@@ -66,6 +66,30 @@ const Wrapper = styled(Responsive)`
     font-weight: 400;
     font-size: 18px;
     line-height: 20px;
+    color: #969696;
+  }
+  .sellornot {
+    position: absolute;
+    width: 600px;
+    height: 36px;
+    left: 421px;
+    top: 680px;
+
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 36px;
+  }
+  .setPrice {
+    position: absolute;
+    width: 600px;
+    height: 36px;
+    left: 1040px;
+    top: 743px;
+
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    color: #969696;
   }
   .inputName {
     font-size: 1.4rem;
@@ -97,10 +121,53 @@ const Wrapper = styled(Responsive)`
     width: 170px;
     height: 50px;
     left: 740px;
-    top: 750px;
+    top: 850px;
     color: white;
     background: #2081e2;
   }
+  .inputPrice {
+    font-size: 1.4rem;
+    font-family: "poppins";
+    position: absolute;
+    width: 100px;
+    height: 36px;
+    left: 1123px;
+    top: 750px;
+  }
+`;
+const ToggleContainer = styled.div`
+  position: absolute;
+  left: 1180px;
+  top: 710px;
+
+  cursor: pointer;
+  > .toggle-container {
+    width: 50px;
+    height: 24px;
+    border-radius: 30px;
+    background-color: #8b8b8b;
+    transition: all 0.2s ease;
+    &.toggle--checked {
+      background-color: #2081e2;
+    }
+  }
+  > .toggle-circle {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: #fafafa;
+    transition: all 0.25s ease;
+    &.toggle--checked {
+      left: 27px;
+    }
+  }
+`;
+
+const Spacer = styled.div`
+  height: 60rem;
 `;
 
 const MintFunc = async (address, imgurl, contractAddress) => {
@@ -166,19 +233,19 @@ const Create = ({ account, contractAddress }) => {
 
     // 컨트랙 함수 실행
     MintFunc(account, metadata.ercURL, contractAddress);
-    console.log(account)
-    console.log(Date)
+    console.log(account);
+    console.log(Date);
     // Post 요청: DB 저장
     try {
-      axios 
-        .post('http://localhost:5000/create', {
-          address: account, // 소유자 주소 
-          name: metadata.name, // NFT 이름 
-          ercURL: metadata.ercURL, // NFT URL 
-          createdAT: Date(), // NFT 생성일 
+      axios
+        .post("http://localhost:5000/create", {
+          address: account, // 소유자 주소
+          name: metadata.name, // NFT 이름
+          ercURL: metadata.ercURL, // NFT URL
+          createdAT: Date(), // NFT 생성일
           description: metadata.description, // NFT 설명
-          sellType: metadata.sellType, // 판매여부 
-          sellPrice: metadata.sellPrice // 가격 
+          sellType: metadata.sellType, // 판매여부
+          sellPrice: metadata.sellPrice, // 가격
         })
         .then((res) => {
           //console.log(res);
@@ -187,52 +254,73 @@ const Create = ({ account, contractAddress }) => {
         .catch((err) => {
           console.log(err);
         });
-      } catch (error) {
-        return console.log(error);
-      }
-
+    } catch (error) {
+      return console.log(error);
+    }
   };
 
   return (
-    <Wrapper>
-      <h1 className="title">Create New Item</h1>
-      <p className="Image">IMAGE</p>
-      <input
-        type="file"
-        id="img"
-        name="img"
-        accept="image/*"
-        className="inputImg"
-        onChange={handleUrl}
-      />
-      <p className="name">NAME</p>
-      <input
-        type="text"
-        name="name"
-        className="inputName"
-        onChange={handleChange}
-      />
-      <p className="description">DESCRIPTION</p>
-      <p className="description_contents">
-        The description will be included on the item's detail page underneath
-        its image.
-      </p>
-      <input
-        type="textarea"
-        name="description"
-        className="inputDesc"
-        onChange={handleChange}
-      />
-      <Button name="sellType" onClick={handleSell}>
-        Sell?
-      </Button>
-      {metadata.sellType ? (
-        <input type="number" name="sellPrice" onChange={handleChange} />
-      ) : null}
-      <Button className="createButton" onClick={handleClick}>
-        Create
-      </Button>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <h1 className="title">Create New Item</h1>
+        <p className="Image">IMAGE</p>
+        <input
+          type="file"
+          id="img"
+          name="img"
+          accept="image/*"
+          className="inputImg"
+          onChange={handleUrl}
+        />
+        <p className="name">NAME</p>
+        <input
+          type="text"
+          name="name"
+          className="inputName"
+          onChange={handleChange}
+        />
+        <p className="description">DESCRIPTION</p>
+        <p className="description_contents">
+          The description will be included on the item's detail page underneath
+          its image.
+        </p>
+        <input
+          type="textarea"
+          name="description"
+          className="inputDesc"
+          onChange={handleChange}
+        />
+        <p className="sellornot">NFT STATUS</p>
+
+        <ToggleContainer name="sellType" onClick={handleSell}>
+          <div
+            className={`toggle-container ${
+              metadata.sellType ? "toggle--checked" : ""
+            }`}
+          />
+          <div
+            className={`toggle-circle ${
+              metadata.sellType ? "toggle--checked" : ""
+            }`}
+          />
+        </ToggleContainer>
+        {metadata.sellType ? (
+          <>
+            <p className="setPrice">Set Price</p>
+            <input
+              type="number"
+              name="sellPrice"
+              className="inputPrice"
+              onChange={handleChange}
+            />
+          </>
+        ) : null}
+        <Button className="createButton" onClick={handleClick}>
+          Create
+        </Button>
+      </Wrapper>
+      <Spacer />
+    </>
   );
 };
 
