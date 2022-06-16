@@ -8,6 +8,7 @@ import Explore from "./pages/Explore";
 import MyPage from "./pages/MyPage";
 import Home from "./pages/Home";
 import Navigator from "./pages/Navigator";
+import Info from "./pages/Info";
 
 function App() {
   const [web3, setWeb3] = useState();
@@ -111,6 +112,7 @@ function App() {
             <MyPage account={account} web3={web3} erc721list={erc721list} showMyNfts={showMyNfts}/>
           }
         />
+        <Route path="/info" element={<Info />} />
       </Routes>
     </div>
   );
