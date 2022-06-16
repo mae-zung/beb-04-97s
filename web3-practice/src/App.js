@@ -112,7 +112,7 @@ function App() {
             <MyPage account={account} web3={web3} erc721list={erc721list} showMyNfts={showMyNfts}/>
           }
         />
-        <Route path="/info" element={<Info />} />
+        <Route path="/info/:id" element={<Info />} />
       </Routes>
     </div>
   );

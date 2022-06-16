@@ -1,6 +1,7 @@
 import erc721Abi from "./erc721Abi";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import {NavLink} from "react-router-dom";
 import Info from "../pages/Info";
 
 const NFTeach = styled.img`
@@ -30,9 +31,11 @@ function Erc721({ web3, account, erc721list, nft}) {
   return (
     <div className="erc721list">
       {nft.map((token) => {
-        return <NFTeach className="erc721token" src={token.ercURL} >
-          
-        </NFTeach>;
+        return (
+        <NavLink to={"/Info/"+token._id}>
+          <NFTeach className="erc721token" src={token.ercURL} />
+        </NavLink>
+        )
       })}
     </div>
   );
