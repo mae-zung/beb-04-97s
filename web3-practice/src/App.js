@@ -37,7 +37,14 @@ function App() {
   };
 
   const showMyNfts = () => {
+    setErc721list([]);
+
     addNewErc721Token();
+  };
+
+  const showAllNfts = () => {
+    setAllErc721list([]);
+    addAllErc721Token();
   };
 
   const addNewErc721Token = async () => {
@@ -50,18 +57,33 @@ function App() {
       arr.push(i);
     }
 
-    console.log(1);
     for (let tokenId of arr) {
       let tokenOwner = await tokenContract.methods.ownerOf(tokenId).call();
-      let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
-      setAllErc721list((prevState) => {
-        return [...prevState, { name, symbol, tokenId, tokenURI }];
-      });
+
       if (String(tokenOwner).toLowerCase() === account) {
+        let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
         setErc721list((prevState) => {
           return [...prevState, { name, symbol, tokenId, tokenURI }];
         });
       }
+    }
+  };
+
+  const addAllErc721Token = async () => {
+    const tokenContract = await new web3.eth.Contract(erc721Abi, newErc721addr);
+    const name = await tokenContract.methods.name().call();
+    const symbol = await tokenContract.methods.symbol().call();
+    const totalSupply = await tokenContract.methods.totalSupply().call();
+    let arr = [];
+    for (let i = 1; i <= totalSupply; i++) {
+      arr.push(i);
+    }
+
+    for (let tokenId of arr) {
+      let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
+      setAllErc721list((prevState) => {
+        return [...prevState, { name, symbol, tokenId, tokenURI }];
+      });
     }
   };
 
@@ -71,18 +93,14 @@ function App() {
         connectWallet={connectWallet}
         account={account}
         showMyNfts={showMyNfts}
+        showAllNfts={showAllNfts}
       />
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
         <Route
           path="/explore"
           element={
-            <Explore
-              showMyNfts={showMyNfts}
-              account={account}
-              web3={web3}
-              erc721list={allErc721list}
-            />
+            <Explore account={account} web3={web3} erc721list={allErc721list} />
           }
         />
         <Route
