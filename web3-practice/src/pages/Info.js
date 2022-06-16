@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import Button from "../components/Button";
 import styled from "styled-components";
 import Responsive from "../components/Responsive";
-import { MdAccountBalanceWallet } from "react-icons/md";
 import { FaEthereum } from "react-icons/fa";
-import axios from 'axios';
+import axios from "axios";
 
 const Wrapper = styled(Responsive)`
   font-style: normal;
@@ -49,9 +48,20 @@ const Wrapper = styled(Responsive)`
     left: 829px;
     top: 617px;
     color: white;
-    font-size: 30px;
+    font-size: 25px;
     background: #2081e2;
   }
+  .button2 {
+    position: absolute;
+    width: 394px;
+    height: 84px;
+    left: 829px;
+    top: 617px;
+    color: white;
+    font-size: 25px;
+    background: #969696;
+  }
+  
   .currentPrice {
     position: absolute;
     width: 609px;
@@ -87,32 +97,32 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
-const Info = () => {
+//nft 구매 함수
+const handleClick = () => {};
 
+const Info = () => {
   const [nft, setNft] = useState([]);
 
-  let url = window.location.href.split('/')
-  console.log(url[4])
+  let url = window.location.href.split("/");
+  console.log(url[4]);
 
   useEffect(() => {
-  axios.get('http://localhost:5000/info/'+url[4])
-  .then((res) => {
-    setNft(res.data)
-  })
+    axios.get("http://localhost:5000/info/" + url[4]).then((res) => {
+      setNft(res.data);
+    });
   }, []);
 
   return (
     <Wrapper>
-      <img
-        src={nft.ercURL}
-        className="nftimg"
-      />
+      <img src={nft.ercURL} className="nftimg" />
       <h1 className="name">NFT name --- {nft.name}</h1>
       <p className="description">NFT description --- {nft.description}</p>
       <p className="currentPrice">NFT currentPrice --- {nft.sellPrice}</p>
       <FaEthereum className="eth" /> <p className="price">{nft.sellPrice}</p>
-      <Button className="button1">
-        <MdAccountBalanceWallet />
+      <Button
+        className={nft.sellType ? "button1" : "button2"}
+        onClick={handleClick}
+      >
         BUY NOW
       </Button>
     </Wrapper>
