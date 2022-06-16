@@ -1,29 +1,26 @@
-import React, { useEffect } from "react";
-import { dummyNFTs } from "../components/dummyNFTs";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
 import TokenList from "../components/TokenList";
-import Responsive from "../components/Responsive";
+import axios from 'axios';
 
 
-const NFTList = styled(Responsive)`
-  position: absolute;
-
-  left: 100px;
-  top: 550px;
-`;
 
 const Explore = ({ web3, account, erc721list, showAllNfts }) => {
 
-  useEffect(() => {
+  const [nft, setNft] = useState([]);
 
+  useEffect(() => {
     showAllNfts()
+    axios.get('http://localhost:5000/explore')
+    .then((res) => {
+      setNft(res.data)
+    })
   }, []);
   
   return (
     <div>
       <h1>Explore NFTs</h1>
-      <p>{dummyNFTs.length} items</p>
-      <TokenList web3={web3} account={account} erc721list={erc721list} />
+      <p>{nft.length} items</p>
+      <TokenList web3={web3} account={account} erc721list={erc721list} nft={nft}/>
     </div>
   );
 };

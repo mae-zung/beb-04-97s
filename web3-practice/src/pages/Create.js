@@ -103,11 +103,11 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
-const MintFunc = async (address, imgurl, contractAdress) => {
+const MintFunc = async (address, imgurl, contractAddress) => {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
     try {
-      const myContract = new web3.eth.Contract(erc721Abi, contractAdress);
+      const myContract = new web3.eth.Contract(erc721Abi, contractAddress);
       const gasPrice = await web3.eth.getGasPrice();
       const itemID = await myContract.methods.mintNFT(address, imgurl).send({
         from: address,
@@ -166,14 +166,16 @@ const Create = ({ account, contractAddress }) => {
 
     // 컨트랙 함수 실행
     MintFunc(account, metadata.ercURL, contractAddress);
+    console.log(account)
+    console.log(Date)
     // Post 요청: DB 저장
     try {
       axios 
         .post('http://localhost:5000/create', {
-          address: metadata.address, // 소유자 주소 
+          address: account, // 소유자 주소 
           name: metadata.name, // NFT 이름 
           ercURL: metadata.ercURL, // NFT URL 
-          createdAT: metadata.createdAT, // NFT 생성일 
+          createdAT: Date(), // NFT 생성일 
           description: metadata.description, // NFT 설명
           sellType: metadata.sellType, // 판매여부 
           sellPrice: metadata.sellPrice // 가격 

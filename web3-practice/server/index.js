@@ -101,15 +101,27 @@ app.post('/create', (req, res) => {
 
 })
 
+app.get('/explore',(req,res)=>{
+  db.collection('beb').find({}).toArray((err,result)=>{
+    console.log(result[0].data);
+    res.send(result);
+  })
+})
 
+app.get('/mypage',(req,res)=>{
+  db.collection('beb').find({}).toArray((err,result)=>{
+    console.log(result[0].data);
+    res.send(result);
+  })
+})
 
 
 //메타데이터를 보내주는 작업이 끝!! 
-app.get('/erc721/:tokenId', (req, res) => {
+app.get('/:tokenId', (req, res) => {
   let tokenId = req.params.tokenId;
   console.log(tokenId);
 
-  db.collection('Types').find({ 'data.tokenId': tokenId }).toArray((error, result) => {
+  db.collection('beb').find({ 'data.tokenId': tokenId }).toArray((error, result) => {
     console.log(result);
     if (error) console.log(error);
     if (result) {
