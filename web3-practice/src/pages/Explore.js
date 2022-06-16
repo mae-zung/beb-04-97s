@@ -1,12 +1,12 @@
 import React from "react";
 import { dummyNFTs } from "../components/dummyNFTs";
-
-const Explore = () => {
+const Explore = ({ showMyNfts }) => {
   return (
     <div>
       <h1>Explore NFTs</h1>
       <p>{dummyNFTs.length} items</p>
-      {dummyNFTs.map((NFT) => {
+      <button onClick={showMyNfts}>SHOW MY NFTs</button>
+      {/* {dummyNFTs.map((NFT) => {
         return (
           <li key={NFT.id}>
             <img src={NFT.image} alt="nft_image" />
@@ -14,7 +14,7 @@ const Explore = () => {
             <div>{NFT.price}</div>
           </li>
         );
-      })}
+      })} */}
     </div>
   );
 };
