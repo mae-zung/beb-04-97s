@@ -243,9 +243,10 @@ const Create = ({ account, contractAddress }) => {
 
   const handleClick = () => {
     //metadata 완성하기 => address, createdAT
-    if (account) {
-      setMetadata({ ...metadata, address: account, createdAT: Date() });
-      console.log(metadata);
+    if (!account) {
+      //   setMetadata({ ...metadata, address: account, createdAT: Date() });
+      //   console.log(metadata);
+      alert("지갑을 연결하세요");
     }
 
     // 컨트랙 함수 실행
@@ -255,7 +256,7 @@ const Create = ({ account, contractAddress }) => {
     // Post 요청: DB 저장
     try {
       axios
-        .post("http://localhost:5000/create", {
+        .post("http://localhost:5001/create", {
           address: account, // 소유자 주소
           name: metadata.name, // NFT 이름
           ercURL: metadata.ercURL, // NFT URL
