@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Responsive from "../components/Responsive";
 import { FaEthereum } from "react-icons/fa";
 import axios from "axios";
+import Web3 from "web3";
+import erc721Abi from "../components/erc721Abi";
 
 const Wrapper = styled(Responsive)`
   font-style: normal;
@@ -98,16 +100,55 @@ const Wrapper = styled(Responsive)`
 `;
 
 //nft 구매 함수
-const handleClick = () => {};
 
-const Info = () => {
+const BuyNft = async (tokenId, price, owner, account, contractAddress) => {
+  if (window.ethereum) {
+    const web3 = new Web3(window.ethereum);
+
+    try {
+      const tokenContract = await new web3.eth.Contract(
+        erc721Abi,
+        contractAddress
+      );
+      //   const owner = await tokenContract.methods.ownerOf(tokenId);
+      const balance = await web3.eth.getBalance(account);
+      if (balance < price) {
+        alert("잔고가 부족합니다.");
+      } else {
+        // 이더부터 보내기
+        web3.eth
+          .sendTransaction({
+            from: account,
+            to: owner,
+            value: price,
+          })
+          .then((receipt) => {
+            console.log("receipt", receipt);
+          });
+        //nft 받기
+        tokenContract.methods
+          .transferFrom(owner, account, tokenId)
+          .send({
+            from: owner,
+          })
+          .on("receipt", (receipt) => {
+            console.log(receipt);
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
+const Info = ({ account, contractAddress }) => {
   const [nft, setNft] = useState([]);
 
   let url = window.location.href.split("/");
   console.log(url[4]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/info/" + url[4]).then((res) => {
+    axios.get("http://localhost:5001/info/" + url[4]).then((res) => {
       setNft(res.data);
     });
   }, []);
@@ -121,7 +162,13 @@ const Info = () => {
       <FaEthereum className="eth" /> <p className="price">{nft.sellPrice}</p>
       <Button
         className={nft.sellType ? "button1" : "button2"}
-        onClick={handleClick}
+        onClick={BuyNft(
+          nft.tokenId,
+          nft.sellPrice,
+          nft.address,
+          account,
+          contractAddress
+        )}
       >
         BUY NOW
       </Button>

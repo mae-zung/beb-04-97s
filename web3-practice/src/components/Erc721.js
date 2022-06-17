@@ -1,18 +1,15 @@
 import erc721Abi from "./erc721Abi";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import {NavLink} from "react-router-dom";
-import Info from "../pages/Info";
+import { NavLink } from "react-router-dom";
 
 const NFTeach = styled.img`
-    width: 300px;
-    height: 300px;
-    margin: 10px;
+  width: 300px;
+  height: 300px;
+  margin: 10px;
 `;
 
-
-function Erc721({ web3, account, erc721list, nft}) {
-
+function Erc721({ web3, account, erc721list, nft }) {
   const [to, setTo] = useState("");
   const sendToken = async (tokenAddr, tokenId) => {
     const tokenContract = await new web3.eth.Contract(erc721Abi, tokenAddr, {
@@ -32,10 +29,10 @@ function Erc721({ web3, account, erc721list, nft}) {
     <div className="erc721list">
       {nft.map((token) => {
         return (
-        <NavLink to={"/Info/"+token._id}>
-          <NFTeach className="erc721token" src={token.ercURL} />
-        </NavLink>
-        )
+          <NavLink to={"/Info/" + token._id}>
+            <NFTeach className="erc721token" src={token.ercURL} />
+          </NavLink>
+        );
       })}
     </div>
   );
