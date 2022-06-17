@@ -13,7 +13,7 @@ import Info from "./pages/Info";
 function App() {
   const [web3, setWeb3] = useState();
   const [account, setAccount] = useState("");
-  const newErc721addr = "0x70d609C2250DC188930dcf94eC2052c27EE9e81f";
+  const newErc721addr = "0xF1e7504A8CA4528C844cf7aC0CADAdB874cdcE19";
   const [erc721list, setErc721list] = useState([]); // 자신의 NFT 정보를 저장할 토큰
   const [allErc721list, setAllErc721list] = useState([]); // 모든 NFT 정보를 저장할 토큰
 
@@ -90,16 +90,18 @@ function App() {
 
   return (
     <div>
-      <Navigator
-        connectWallet={connectWallet}
-        account={account}
-      />
+      <Navigator connectWallet={connectWallet} account={account} />
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
         <Route
           path="/explore"
           element={
-            <Explore account={account} web3={web3} erc721list={allErc721list} showAllNfts={showAllNfts} />
+            <Explore
+              account={account}
+              web3={web3}
+              erc721list={allErc721list}
+              showAllNfts={showAllNfts}
+            />
           }
         />
         <Route
@@ -109,10 +111,18 @@ function App() {
         <Route
           path="/mypage"
           element={
-            <MyPage account={account} web3={web3} erc721list={erc721list} showMyNfts={showMyNfts}/>
+            <MyPage
+              account={account}
+              web3={web3}
+              erc721list={erc721list}
+              showMyNfts={showMyNfts}
+            />
           }
         />
-        <Route path="/info/:id" element={<Info />} />
+        <Route
+          path="/info/:id"
+          element={<Info account={account} contractAddress={newErc721addr} />}
+        />
       </Routes>
     </div>
   );

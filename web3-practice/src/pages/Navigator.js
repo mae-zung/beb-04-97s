@@ -7,8 +7,9 @@ import { MdAccountBalanceWallet } from "react-icons/md";
 
 const HeaderBlock = styled.div`
   position: fixed;
+  z-index: 100;
   width: 100%;
-  backgroud: white;
+  background-color: white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 `;
 

@@ -101,7 +101,8 @@ const Wrapper = styled(Responsive)`
 
 //nft 구매 함수
 
-const BuyNft = async (tokenId, price, owner, account, contractAddress) => {
+const BuyNft = async (tokenId, price, account, contractAddress) => {
+  price = parseInt(price);
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
 
@@ -110,7 +111,8 @@ const BuyNft = async (tokenId, price, owner, account, contractAddress) => {
         erc721Abi,
         contractAddress
       );
-      //   const owner = await tokenContract.methods.ownerOf(tokenId);
+      const owner = await tokenContract.methods.ownerOf(tokenId).call();
+      console.log(owner);
       const balance = await web3.eth.getBalance(account);
       if (balance < price) {
         alert("잔고가 부족합니다.");
@@ -124,15 +126,19 @@ const BuyNft = async (tokenId, price, owner, account, contractAddress) => {
           })
           .then((receipt) => {
             console.log("receipt", receipt);
-          });
-        //nft 받기
-        tokenContract.methods
-          .transferFrom(owner, account, tokenId)
-          .send({
-            from: owner,
+            alert("계산 완료");
           })
-          .on("receipt", (receipt) => {
-            console.log(receipt);
+          //nft 받기
+          .then(async () => {
+            await tokenContract.methods
+              .transferFrom(owner, account, tokenId)
+              .send({
+                from: owner,
+              })
+              .on("receipt", (receipt) => {
+                console.log("receipt", receipt);
+                alert("nft 구매 완료");
+              });
           });
       }
     } catch (error) {
@@ -145,13 +151,15 @@ const Info = ({ account, contractAddress }) => {
   const [nft, setNft] = useState([]);
 
   let url = window.location.href.split("/");
-  console.log(url[4]);
+  //   console.log(url[4]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/info/" + url[4]).then((res) => {
+    axios.get("http://localhost:5001/info/" + url[4]).then((res) => {
       setNft(res.data);
     });
   }, []);
+
+  //   console.log(nft);
 
   return (
     <Wrapper>
@@ -162,13 +170,9 @@ const Info = ({ account, contractAddress }) => {
       <FaEthereum className="eth" /> <p className="price">{nft.sellPrice}</p>
       <Button
         className={nft.sellType ? "button1" : "button2"}
-        onClick={BuyNft(
-          nft.tokenId,
-          nft.sellPrice,
-          nft.address,
-          account,
-          contractAddress
-        )}
+        onClick={() =>
+          BuyNft(nft.tokenHash, nft.sellPrice, account, contractAddress)
+        }
       >
         BUY NOW
       </Button>

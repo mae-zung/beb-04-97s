@@ -19,7 +19,7 @@ MongoClient.connect(
       console.log(error);
     } else {
       db = client.db("97s");
-      app.listen(process.env.PORT || 5000, () => {
+      app.listen(process.env.PORT || 5001, () => {
         console.log("localhost:5000/");
       });
     }
@@ -90,7 +90,7 @@ app.post("/create", (req, res) => {
       description: input.description,
       sellType: input.sellType,
       sellPrice: input.sellPrice,
-      tokenHash: input.tokenHash
+      tokenHash: input.tokenHash,
     },
     (error, result) => {
       console.log(result);
@@ -127,13 +127,15 @@ app.post("/create", (req, res) => {
 
 app.put("/create", (req, res) => {
   const account = req.body.ercURL;
-  console.log(req.body.ercURL)
-  console.log(req.body.tokenHash)
-  db.collection('beb').updateOne({ ercURL: account }, {
-    "$set": { "tokenHash": req.body.tokenHash },
-  });
-  res.send('success')
-
+  console.log(req.body.ercURL);
+  console.log(req.body.tokenHash);
+  db.collection("beb").updateOne(
+    { ercURL: account },
+    {
+      $set: { tokenHash: req.body.tokenHash },
+    }
+  );
+  res.send("success");
 });
 
 app.get("/explore", (req, res) => {
@@ -167,4 +169,3 @@ app.get("/info/:tokenId", (req, res) => {
       }
     });
 });
-

@@ -170,7 +170,6 @@ const Spacer = styled.div`
   height: 60rem;
 `;
 
-
 const client = create("https://ipfs.infura.io:5001/api/v0");
 
 const Create = ({ account, contractAddress }) => {
@@ -190,31 +189,34 @@ const Create = ({ account, contractAddress }) => {
       try {
         const myContract = new web3.eth.Contract(erc721Abi, contractAddress);
         const gasPrice = await web3.eth.getGasPrice();
-        const itemID = await myContract.methods.mintNFT(address, imgurl).send({
+        const tx = await myContract.methods.mintNFT(address, imgurl).send({
           from: address,
           gas: 2000000,
           gasPrice,
         });
-        console.log("민팅 완료");
-        try {
-          axios
-            .put("http://localhost:5000/create", {
-              ercURL: metadata.ercURL, // 소유자 주소
-              tokenHash: itemID
-            })
-            .then((res) => {
-              console.log(res);
-              alert("성공");
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } catch (error) {
-          return console.log(error);
-        }
+        return tx;
       } catch (error) {
         console.log(error);
       }
+    }
+  };
+
+  const databaseSend = async (itemID) => {
+    try {
+      axios
+        .put("http://localhost:5001/create", {
+          ercURL: metadata.ercURL, // 소유자 주소
+          tokenHash: itemID,
+        })
+        .then((res) => {
+          console.log(res);
+          alert("성공");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      return console.log(error);
     }
   };
 
@@ -250,9 +252,14 @@ const Create = ({ account, contractAddress }) => {
     }
 
     // 컨트랙 함수 실행
-    MintFunc(account, metadata.ercURL, contractAddress);
-    console.log(account);
-    console.log(Date);
+    MintFunc(account, metadata.ercURL, contractAddress)
+      .then((tx) => {
+        console.log({ tokenId: tx.events.Transfer.returnValues.tokenId });
+        return tx.events.Transfer.returnValues.tokenId;
+      })
+      .then((tokenId) => databaseSend(tokenId));
+    // console.log(account);
+    // console.log(Date);
     // Post 요청: DB 저장
     try {
       axios
@@ -267,7 +274,7 @@ const Create = ({ account, contractAddress }) => {
         })
         .then((res) => {
           //console.log(res);
-          alert("성공적으로 발행되었습니다.");
+          //   alert("성공적으로 발행되었습니다.");
         })
         .catch((err) => {
           console.log(err);
@@ -312,12 +319,14 @@ const Create = ({ account, contractAddress }) => {
 
         <ToggleContainer name="sellType" onClick={handleSell}>
           <div
-            className={`toggle-container ${metadata.sellType ? "toggle--checked" : ""
-              }`}
+            className={`toggle-container ${
+              metadata.sellType ? "toggle--checked" : ""
+            }`}
           />
           <div
-            className={`toggle-circle ${metadata.sellType ? "toggle--checked" : ""
-              }`}
+            className={`toggle-circle ${
+              metadata.sellType ? "toggle--checked" : ""
+            }`}
           />
         </ToggleContainer>
         {metadata.sellType ? (
