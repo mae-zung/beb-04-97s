@@ -43,6 +43,7 @@ const input = {
   description: "", // NFT 설명
   sellType: "", // 판매여부
   sellPrice: "", // 가격
+  tokenHash: "",
 };
 
 function inputMeta(
@@ -52,7 +53,8 @@ function inputMeta(
   createdAT,
   description,
   sellType,
-  sellPrice
+  sellPrice,
+  tokenHash
 ) {
   input.address = address;
   input.name = name;
@@ -61,6 +63,7 @@ function inputMeta(
   input.description = description;
   input.sellType = sellType;
   input.sellPrice = sellPrice;
+  input.tokenHash = tokenHash;
 }
 
 //create page post
@@ -74,7 +77,8 @@ app.post("/create", (req, res) => {
     req.body.createdAT,
     req.body.description,
     req.body.sellType,
-    req.body.sellPrice
+    req.body.sellPrice,
+    req.body.tokenHash
   );
 
   db.collection("beb").insertOne(
@@ -86,6 +90,7 @@ app.post("/create", (req, res) => {
       description: input.description,
       sellType: input.sellType,
       sellPrice: input.sellPrice,
+      tokenHash: input.tokenHash
     },
     (error, result) => {
       console.log(result);
@@ -120,6 +125,17 @@ app.post("/create", (req, res) => {
   res.send("success");
 });
 
+app.put("/create", (req, res) => {
+  const account = req.body.ercURL;
+  console.log(req.body.ercURL)
+  console.log(req.body.tokenHash)
+  db.collection('beb').updateOne({ ercURL: account }, {
+    "$set": { "tokenHash": req.body.tokenHash },
+  });
+  res.send('success')
+
+});
+
 app.get("/explore", (req, res) => {
   db.collection("beb")
     .find({})
@@ -152,108 +168,3 @@ app.get("/info/:tokenId", (req, res) => {
     });
 });
 
-// //소유권이전으로인해서 특정 값을 삭제하고 삭제 후 특정 계정에 값을 옮겨주는 작업.
-// function deleteSeller(seller, tokenId) {
-//   db.collection('NFTPOST').update(
-//     {
-//       "account": seller
-//     },
-//     {
-//       "$pull": {
-//         "tokenIds": { "tokenId": Number(tokenId) }
-//       }
-//     }
-//   )
-// }
-
-// function changeOwner(seller, buyer) {
-//   db.collection('Types').update(
-//     {
-//       "data.account": seller
-//     },
-//     {
-//       "$set": {
-//         "data.account": buyer
-//       }
-//     }
-//   )
-
-// }
-
-// app.post('/buy', (req, res) => {
-
-//   const buyer = req.body.buyer.toLowerCase();
-//   const seller = req.body.seller.toLowerCase();
-//   const tokenId = req.body.tokenId;
-//   const type = req.body.type;
-
-//   //buyer의 Db에 tokenId를 추가시킨다.
-//   if (buyer !== undefined) {
-//     db.collection('NFTPOST').find({ 'account': buyer }).toArray((error, result) => {
-
-//       if (result[0] !== undefined) {
-//         deleteSeller(seller, tokenId);
-//         changeOwner(seller, buyer)
-//         //DB에 이미 한번 저장이 되어있는 상태면 추가해주는 쿼리를 날린다.
-//         db.collection('NFTPOST').update({ account: buyer }, {
-//           "$push": { "tokenIds": { "tokenId": Number(tokenId), 'type': type } },
-//         });
-
-//       } else {
-//         //처음이라면 저장해주자.
-//         deleteSeller(seller, tokenId);
-//         changeOwner(seller, buyer)
-//         db.collection('NFTPOST').insertOne({ account: buyer, tokenIds: [{ tokenId: Number(tokenId), type: type }] }, (error, result) => {
-//           console.log(result);
-//         });
-//       }
-//     })
-//   }
-
-//   res.send('success');
-
-// })
-
-// app.get('/Main', (req, res) => {
-//   db.collection('Types').find({}).toArray((err, result) => {
-//     console.log(result[0].data.tokenId);
-//     res.send(result);
-//   })
-// })
-
-// app.post('/mypage', (req, res) => {
-
-//   const account = req.body.account
-
-//   console.log(account);
-
-//   const change = account.toLowerCase();
-//   console.log(change);
-
-//   const mypageData = [];
-//   db.collection('NFTPOST').find({ account: change }).toArray((err, result) => {
-
-//     if (result[0] !== undefined) {
-
-//       for (let i = 0; i < result[0].tokenIds.length; i++) {
-//         mypageData.push(result[0].tokenIds[i].tokenId)
-//       }
-
-//       const sendData = [];
-
-//       for (let i = 0; i < mypageData.length; i++) {
-//         db.collection('Types').find({ 'data.tokenId': mypageData[i] }).toArray((err, result) => {
-//           sendData.push(...result);
-//         })
-//       }
-
-//       setTimeout(() => {
-//         res.send(sendData)
-//       }, 1000)
-
-//     } else {
-//       res.send([]);
-//     }
-//   })
-
-// })

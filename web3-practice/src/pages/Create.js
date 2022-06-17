@@ -170,24 +170,7 @@ const Spacer = styled.div`
   height: 60rem;
 `;
 
-const MintFunc = async (address, imgurl, contractAddress) => {
-  if (window.ethereum) {
-    const web3 = new Web3(window.ethereum);
-    try {
-      const myContract = new web3.eth.Contract(erc721Abi, contractAddress);
-      const gasPrice = await web3.eth.getGasPrice();
-      const itemID = await myContract.methods.mintNFT(address, imgurl).send({
-        from: address,
-        gas: 2000000,
-        gasPrice,
-      });
-      console.log("민팅 완료");
-      return itemID;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-};
+
 const client = create("https://ipfs.infura.io:5001/api/v0");
 
 const Create = ({ account, contractAddress }) => {
@@ -200,6 +183,40 @@ const Create = ({ account, contractAddress }) => {
     sellType: false,
     sellPrice: "",
   });
+
+  const MintFunc = async (address, imgurl, contractAddress) => {
+    if (window.ethereum) {
+      const web3 = new Web3(window.ethereum);
+      try {
+        const myContract = new web3.eth.Contract(erc721Abi, contractAddress);
+        const gasPrice = await web3.eth.getGasPrice();
+        const itemID = await myContract.methods.mintNFT(address, imgurl).send({
+          from: address,
+          gas: 2000000,
+          gasPrice,
+        });
+        console.log("민팅 완료");
+        try {
+          axios
+            .put("http://localhost:5000/create", {
+              ercURL: metadata.ercURL, // 소유자 주소
+              tokenHash: itemID
+            })
+            .then((res) => {
+              console.log(res);
+              alert("성공");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } catch (error) {
+          return console.log(error);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   async function handleUrl(e) {
     const img = e.target.files[0];
@@ -295,14 +312,12 @@ const Create = ({ account, contractAddress }) => {
 
         <ToggleContainer name="sellType" onClick={handleSell}>
           <div
-            className={`toggle-container ${
-              metadata.sellType ? "toggle--checked" : ""
-            }`}
+            className={`toggle-container ${metadata.sellType ? "toggle--checked" : ""
+              }`}
           />
           <div
-            className={`toggle-circle ${
-              metadata.sellType ? "toggle--checked" : ""
-            }`}
+            className={`toggle-circle ${metadata.sellType ? "toggle--checked" : ""
+              }`}
           />
         </ToggleContainer>
         {metadata.sellType ? (
