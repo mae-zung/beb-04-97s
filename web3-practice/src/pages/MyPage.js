@@ -51,7 +51,7 @@ const MyPage = ({ web3, account, erc721list, showMyNfts }) => {
 
   useEffect(() => {
     showMyNfts();
-    axios.get("http://localhost:5001/mypage").then((res) => {
+    axios.get("http://localhost:5000/mypage").then((res) => {
       for (let i = 0; i < res.data.length; i++) {
         if (res.data[i].address === account) {
           // console.log(res.data[i].address)

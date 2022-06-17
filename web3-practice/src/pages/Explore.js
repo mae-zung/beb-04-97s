@@ -45,7 +45,7 @@ const Explore = ({ web3, account, erc721list, showAllNfts }) => {
 
   useEffect(() => {
     showAllNfts();
-    axios.get("http://localhost:5001/explore").then((res) => {
+    axios.get("http://localhost:5000/explore").then((res) => {
       setNft(res.data);
     });
   }, []);

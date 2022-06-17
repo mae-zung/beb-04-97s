@@ -148,7 +148,7 @@ const Info = ({ account, contractAddress }) => {
   console.log(url[4]);
 
   useEffect(() => {
-    axios.get("http://localhost:5001/info/" + url[4]).then((res) => {
+    axios.get("http://localhost:5000/info/" + url[4]).then((res) => {
       setNft(res.data);
     });
   }, []);
